@@ -5,20 +5,84 @@
   <title>HTML5 Canvas</title>
 </head>
 <body>
+<div class="wrapper">
+	<h1>Draw Time Good Fun To Be Had</h1>
+
+	<label for="base">Pick a Color To Draw With:</label>
+	<input type="color" name="base" id="base_color" value="#BADA55">
+
+	<label for="penSize">Pen Size:</label>
+	<input type="range" name="penSize" id="" min="0" max="25" value="10">
+		
+	
+</div>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+	// make the canvas and the context with which to draw on
 	const canvas = document.querySelector('#draw');
 	const ctx = canvas.getContext('2d');
+	// establish window size of canvas
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+	// make the stroke ends round and the style a color 
 	ctx.strokeStyle = '#BADA55';
 	ctx.lineJoin = 'round';
 	ctx.lineCap ='round';
+	ctx.lineWidth = 22;
+
+// you want to know when the user is mousing down to draw and on mouse up stop drawing....so we make a flag
+	let isDrawing = false;
+	let  lastX =  0;
+	let  lastY =  0;
+
+	function draw(e){
+		// stops function if not moused down...not drawing
+		if(!isDrawing){
+			return;
+		}
+		ctx.beginPath();
+		// path starts here
+		ctx.moveTo(lastX,lastY);
+		// path ends here
+		ctx.lineTo(e.offsetX,e.offsetY);
+		ctx.stroke();
+		lastX = e.offsetX;
+		lastY = e.offsetY;
+	}
+
+	canvas.addEventListener('mousedown', function(e){
+		isDrawing = true;
+		lastX = e.offsetX;
+		lastY = e.offsetY;
+	});
+
+	canvas.addEventListener('mousemove', draw);
+	canvas.addEventListener('mouseup', function(){
+		isDrawing = false;
+	});
+	canvas.addEventListener('mouseout', function(){
+		isDrawing = false;
+	});
+// dealing with the inputs for color and pen size
+const controllers = document.querySelectorAll('.wrapper input');
+controllers.forEach(control => control.addEventListener('change', ChangeControls));
+controllers.forEach(control => control.addEventListener('mousemove',ChangeControls));
+
+function ChangeControls(){
+	document.documentElement.style.setProperty(`--${this.name}`, this.value)
+}
+
+	
 </script>
 
 <style>
   html, body {
     margin:0;
+  }
+  :root{
+  	--base:#BADA55;
+  	--pen:22;
+
   }
 </style>
 
