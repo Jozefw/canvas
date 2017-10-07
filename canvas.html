@@ -12,9 +12,8 @@
 	<input type="color" name="base" id="base_color" value="#BADA55">
 
 	<label for="penSize">Pen Size:</label>
-	<input type="range" name="penSize" id="" min="0" max="25" value="10">
+	<input type="range" name="penSize" id="PenSize" min="0" max="25" value="10">
 		
-	
 </div>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
@@ -64,14 +63,18 @@
 		isDrawing = false;
 	});
 // dealing with the inputs for color and pen size
-const controllers = document.querySelectorAll('.wrapper input');
-controllers.forEach(control => control.addEventListener('change', ChangeControls));
-controllers.forEach(control => control.addEventListener('mousemove',ChangeControls));
+const color = document.querySelector('.wrapper #base_color');
+	color.addEventListener('change',alterColor);
 
-function ChangeControls(){
-	document.documentElement.style.setProperty(`--${this.name}`, this.value)
+function alterColor(){
+	ctx.strokeStyle = this.value;
 }
+const penSize = document.querySelector('.wrapper #PenSize');
+	penSize.addEventListener('change', alterSize);
 
+	function alterSize(){
+		ctx.lineWidth = this.value;
+	}
 	
 </script>
 
